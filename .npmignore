@@ -1,0 +1,17 @@
+/docs/assets
+/pull_request_template.md
+/.vscode
+/.github
+/.git
+/.gitignore
+/docs
+/TODO.md
+/node_modules
+/[Bb]uild*
+/test*
+/.vscode
+/configPath.toml
+/jest.config.js
+vscode-profile*
+ignore*
+/src
