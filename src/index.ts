@@ -64,7 +64,7 @@ export class Chat {
 		}
 
 		// Print
-		this.rlOpts.output.write(str);
+		this.rlOpts.output.write('\r' + str);
 
 		// Move down the chat prompt
 		if (resetCursor) {
