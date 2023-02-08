@@ -1,7 +1,7 @@
 {
 	"name": "basic-chat-cli",
 	"description": "",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/678435021/basic-cli-chat/issues"
@@ -29,7 +29,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"publish": "eslint . --fix; tsc; npm publish"
+		"publish": "npm i; eslint . --fix; tsc; npm publish"
 	},
 	"main": "./dist/index.js",
 	"dependencies": {
