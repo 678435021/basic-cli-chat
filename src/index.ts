@@ -2,6 +2,7 @@ import EventEmitter from 'events';
 import { type Interface, type ReadLineOptions, createInterface } from 'readline';
 import type TypedEmitter from 'typed-emitter';
 import { type EventMap } from 'typed-emitter';
+import { clearLine as clr } from './lib/clearLine.js';
 
 interface MsgData {
 	msg: string
@@ -49,21 +50,26 @@ export class Chat {
 		 * Move down the input when printing
 		*/
 		resetCursor?: boolean
+		preserveLine?: boolean
+		clearLine?: boolean
 	}): void {
 		if (!this.rlOpts.output) {
 			return;
 		}
 
-		const { resetCursor = true } = options ?? {};
+		const { resetCursor = true, preserveLine = true, clearLine = true } = options ?? {};
+
+		if (resetCursor && clearLine) {
+			clr(this.rlOpts.output, true);
+		}
 
 		// Print
-		this.rlOpts.output.write('\r' + str);
+		this.rlOpts.output.write(str);
 
 		// Move down the chat prompt
-		if (!resetCursor) {
-			return;
+		if (resetCursor) {
+			this.rlOpts.output.write('\n');
+			this.readline.prompt(preserveLine);
 		}
-		this.rlOpts.output.write('\n');
-		this.readline.prompt();
 	}
 }
