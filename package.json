@@ -29,7 +29,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"publish": "npm i; eslint . --fix; tsc; npm publish"
+		"prepublish": "eslint . --fix; tsc"
 	},
 	"main": "./dist/index.js",
 	"dependencies": {
