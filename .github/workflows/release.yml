@@ -1,17 +1,13 @@
-name: "Release"
+name: "Tagged Release"
 
 on:
-  workflow_dispatch:
-
   push:
-    branches:
-      - "master"
-
-permissions: write-all
+    tags:
+      - "*"
 
 jobs:
-  release:
-    name: "Release"
+  tagged-release:
+    name: "Tagged Release"
     runs-on: "ubuntu-latest"
 
     steps:
@@ -24,13 +20,13 @@ jobs:
       - name: "Build"
         run: |
           npm ci
+      - name: "Build"
+        run: |
           npm run build
+      - name: "Publish to NPM"
+        run: |
+          npm publish
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
           prerelease: false
-      - name: "Publish to NPM"
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
