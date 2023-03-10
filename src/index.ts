@@ -51,6 +51,48 @@ interface ChatOptions {
 }
 
 /**
+ * Prints the given string to the specified output with optional formatting options.
+ *
+ * @param {string} str - The string to print.
+ * @param {object} [options] - The formatting options.
+ * @param {boolean} [options.resetCursor=true] - Whether to reset the cursor position to the beginning of the line.
+ * @param {boolean} [options.preserveLine=true] - Whether to preserve the current line of the output when resetting the cursor position.
+ * @param {boolean} [options.clearLine=true] - Whether to clear the output line before printing.
+ * @param {NodeJS.WritableStream} [options.output=process.stdout] - The output stream to print to.
+ * @param {ReadLine} [options.readlineInterface] - The ReadLine interface to use for moving the cursor down.
+ * @returns {void}
+ */
+export function print (str: string, options?: {
+	/*
+	 * Move down the input when printing
+	*/
+	resetCursor?: boolean
+	preserveLine?: boolean
+	clearLine?: boolean
+	output?: NodeJS.WritableStream
+	readlineInterface?: ReadLine
+}): void {
+	const {
+		resetCursor = true, preserveLine = true,
+		clearLine = true, output = process.stdout,
+		readlineInterface
+	} = options ?? {};
+
+	if (resetCursor && clearLine) {
+		clr(output, true);
+	}
+
+	// Print
+	output.write('\r' + str);
+
+	// Move down the chat prompt
+	if (resetCursor) {
+		output.write('\n');
+		readlineInterface?.prompt(preserveLine);
+	}
+}
+
+/**
  * A chat application that allows sending and receiving messages.
  */
 export class Chat {
@@ -118,23 +160,9 @@ export class Chat {
 		preserveLine?: boolean
 		clearLine?: boolean
 	}): void {
-		if (!this.rlOpts.output) {
-			return;
-		}
-
-		const { resetCursor = true, preserveLine = true, clearLine = true } = options ?? {};
-
-		if (resetCursor && clearLine) {
-			clr(this.rlOpts.output, true);
-		}
-
-		// Print
-		this.rlOpts.output.write('\r' + str);
-
-		// Move down the chat prompt
-		if (resetCursor) {
-			this.rlOpts.output.write('\n');
-			this.readline.prompt(preserveLine);
-		}
+		print(str, {
+			...options,
+			...{ output: this.rlOpts.output, readlineInterface: this.readline }
+		});
 	}
 }
