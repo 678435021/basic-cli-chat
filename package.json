@@ -1,7 +1,7 @@
 {
 	"name": "basic-chat-cli",
 	"description": "",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/678435021/basic-cli-chat/issues"
